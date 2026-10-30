@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#04102e"/>
+  <path d="M6 52 L58 8 L58 26 L22 60 Z" fill="#4ff3ff"/>
+  <path d="M4 44 L60 30 L60 38 L4 52 Z" fill="#ff2a4a"/>
+  <text x="32" y="46" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="32" font-style="italic" fill="#fff" stroke="#04102e" stroke-width="3" paint-order="stroke">AJ</text>
+</svg>

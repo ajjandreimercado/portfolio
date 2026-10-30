@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AJ Jandrei Mercado — Portfolio</title>
+<meta name="description" content="AJ Jandrei Mercado, full-stack web and app developer in the Philippines. Websites, web apps, booking systems, mobile apps and machine learning.">
+<meta name="theme-color" content="#04102e">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- link previews (Messenger, Facebook, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="AJ Jandrei Mercado — Full-Stack Web & App Developer">
+<meta property="og:description" content="Websites, web apps, booking systems, mobile apps and machine learning. See my projects and hire me.">
+<meta property="og:url" content="https://ajjandreimercado.github.io/">
+<meta property="og:image" content="https://ajjandreimercado.github.io/img/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,500;0,700;1,600;1,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-screen="home">
+
+<div class="bg" aria-hidden="true">
+  <div class="moon"></div>
+  <div class="streaks"></div>
+  <div class="water"></div>
+</div>
+
+<header class="hud" aria-label="Date and time">
+  <div class="hud-date"><span id="hud-md"></span><span id="hud-day"></span></div>
+  <div class="hud-time" id="hud-time"></div>
+  <button id="sound" class="sound" type="button" aria-pressed="true">Sound On</button>
+</header>
+
+<main>
+  <section id="home" class="screen" aria-label="Main menu">
+    <div class="title reveal" style="--i:0">
+      <p class="kicker">Personal Portfolio</p>
+      <h1 id="name"></h1>
+      <p class="fullname" id="fullname"></p>
+      <p class="role" id="role"></p>
+    </div>
+    <nav class="menu" aria-label="Sections">
+      <a href="#status" class="reveal" style="--i:1"><span>Status</span><small>About me</small></a>
+      <a href="#skills" class="reveal" style="--i:2"><span>Skills</span><small>Social stats</small></a>
+      <a href="#requests" class="reveal" style="--i:3"><span>Requests</span><small>Projects</small></a>
+      <a href="#links" class="reveal" style="--i:4"><span>Social Link</span><small>Profiles &amp; contact</small></a>
+      <a href="#commissions" class="reveal" style="--i:5"><span>Commissions</span><small>Services &amp; hire me</small></a>
+    </nav>
+  </section>
+
+  <section id="status" class="screen" aria-label="About me">
+    <h2 class="screen-title reveal"><span>Status</span></h2>
+    <div class="panel status reveal" style="--i:1">
+      <img id="avatar" class="avatar" alt="" width="220" height="220" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='10' height='10' fill='%231e6bff'/%3E%3Ccircle cx='5' cy='4' r='2' fill='%234ff3ff'/%3E%3Cpath d='M1 10q4-6 8 0' fill='%234ff3ff'/%3E%3C/svg%3E">
+      <div>
+        <p class="label">Arcana · <b>The Fool</b></p>
+        <h3 id="status-name"></h3>
+        <p id="bio" class="bio"></p>
+        <dl id="facts" class="facts"></dl>
+        <span id="cv" class="card-links"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="screen" aria-label="Skills">
+    <h2 class="screen-title reveal"><span>Social Stats</span></h2>
+    <div id="stats" class="stats"></div>
+  </section>
+
+  <section id="requests" class="screen" aria-label="Projects">
+    <h2 class="screen-title reveal"><span>Requests</span></h2>
+    <div id="projects" class="cards"></div>
+  </section>
+
+  <section id="links" class="screen" aria-label="Profiles and contact">
+    <h2 class="screen-title reveal"><span>Social Link</span></h2>
+    <div id="gh-card" class="panel gh reveal" style="--i:1"></div>
+    <div id="link-list" class="cards"></div>
+  </section>
+
+  <section id="commissions" class="screen" aria-label="Services and hiring">
+    <h2 class="screen-title reveal"><span>Commissions</span></h2>
+    <p class="lead reveal" style="--i:1">Need something built? Here's what I can make for you.</p>
+    <div id="services" class="cards"></div>
+    <div class="panel hire reveal" style="--i:4">
+      <div>
+        <h3>Let's work together</h3>
+        <p>Tell me about your project and I'll get back to you. Email me at <a href="mailto:ajjandreimercado@gmail.com?subject=Project%20inquiry">ajjandreimercado@gmail.com</a> or send a message on Messenger.</p>
+      </div>
+      <span id="hire-links" class="card-links"></span>
+    </div>
+  </section>
+</main>
+
+<a href="#home" class="back">◀ Back <kbd>Esc</kbd></a>
+<p class="controls" aria-hidden="true"><kbd>↑↓</kbd> Select <kbd>Enter</kbd> Confirm <kbd>Esc</kbd> Back</p>
+
+<div class="side-word" aria-hidden="true">Main</div>
+
+<!-- P3R menu-open water splash: blobs merged by the goo filter -->
+<svg id="splash" aria-hidden="true">
+  <filter id="goo"><feGaussianBlur stdDeviation="16"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 40 -15"/></filter>
+  <g class="blobs" filter="url(#goo)" fill="#7fe6ff"></g>
+  <g class="blobs" filter="url(#goo)" fill="#c8f7ff"></g>
+  <g class="blobs" filter="url(#goo)" fill="#ffffff"></g>
+  <g class="rings"></g>
+</svg>
+
+<script src="script.js"></script>
+</body>
+</html>
