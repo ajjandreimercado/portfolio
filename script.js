@@ -5,7 +5,7 @@ const ME = {
   photo: "img/aj.jpg", // Status photo
   role: "Full-Stack Web & App Developer",
   github: "ajjandreimercado", // pulls avatar, stats and repos automatically
-  hide: ["gamehaqqqqs2", "gamehaqqqs2", "gamehaqqs2", "focusfury"], // repo names to leave out of Requests
+  hide: ["ajjandreimercado.github.io", "gamehaqqqqs2", "gamehaqqqs2", "gamehaqqs2", "focusfury"], // repo names to leave out of Requests
   // your own descriptions for repos (lowercase names); replaces the GitHub one
   about: {
     broombroom: "An online marketplace for buying cars, motorcycles, trucks, e-bikes and more in the Philippines. Browse and compare vehicles, apply to buy with cash or financing, and message sellers, all in one place.",
