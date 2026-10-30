@@ -10,6 +10,8 @@ const ME = {
   about: {
     broombroom: "An online marketplace for buying cars, motorcycles, trucks, e-bikes and more in the Philippines. Browse and compare vehicles, apply to buy with cash or financing, and message sellers, all in one place.",
     "madyawph-booking-website": "A hotel booking website for Madyaw partner hotels. Guests find a hotel, pick a room and dates, and send a booking request. Once the hotel confirms, they pay easily with GCash or Maya.",
+    pickledesk: "A management system for pickleball courts. Owners can track courts, take reservations and walk-ins, run tournaments, and see their revenue and reports in one dashboard.",
+    limpyo: "A mobile app for cleaning up your phone's photos and videos. Swipe right to keep and left to delete, so clearing out your gallery is quick and easy.",
     emergensign: "An Android app that helps Deaf and Hard-of-Hearing patients talk to emergency responders. The phone camera reads their Filipino Sign Language and the app speaks and shows it in English and Filipino. Works fully offline, no internet needed.",
   },
   // live sites for repos (lowercase names); adds a Visit Site button to the card
