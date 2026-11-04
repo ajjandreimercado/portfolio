@@ -12,24 +12,28 @@ const ME = {
     "madyawph-booking-website": "A hotel booking website for Madyaw partner hotels. Guests find a hotel, pick a room and dates, and send a booking request. Once the hotel confirms, they pay easily with GCash or Maya.",
     pickledesk: "A management system for pickleball courts. Owners can track courts, take reservations and walk-ins, run tournaments, and see their revenue and reports in one dashboard.",
     limpyo: "A mobile app for cleaning up your phone's photos and videos. Swipe right to keep and left to delete, so clearing out your gallery is quick and easy.",
+    lantventure: "A turn-based battle game you play right in the browser, inspired by Persona and Expedition 33. Attack to build points, hit enemies' weak spots, parry their combos, and fight through three battles to a final boss.",
     emergensign: "An Android app that helps Deaf and Hard-of-Hearing patients talk to emergency responders. The phone camera reads their Filipino Sign Language and the app speaks and shows it in English and Filipino. Works fully offline, no internet needed.",
   },
   // live sites for repos (lowercase names); adds a Visit Site button to the card
   sites: {
     broombroom: "https://broombroom.onrender.com/",
     "madyawph-booking-website": "https://www.madyaw.com/",
+    lantventure: "https://ajjandreimercado.github.io/Lantventure/",
   },
   // screenshots for repo cards (lowercase names), files in img/
   shots: {
     broombroom: "img/broombroom.jpg",
     "madyawph-booking-website": "img/madyaw.jpg",
     emergensign: "img/emergensign.jpg",
+    lantventure: "img/lantventure.jpg",
   },
   // display names for repo cards (lowercase names); otherwise the repo name is used
   titles: {
     broombroom: "BroomBroom",
     "madyawph-booking-website": "MadyawPH",
     emergensign: "EmergenSign",
+    lantventure: "Lantern Expedition",
   },
   cv: "AJ_Mercado_CV.pdf",
   messenger: "https://m.me/aj.jandrie.5",
@@ -71,19 +75,17 @@ const RANKS = ["", "Novice", "Apprentice", "Adept", "Expert", "Master"];
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 const ext = (url) => (/^https?:/.test(url) ? ' target="_blank" rel="noopener"' : "");
-// a card with a live site can't be one big link (links can't nest), so it gets two buttons instead
+// a card with a live site gets a Visit Site button; one with only a url is one big link; with neither, plain text
 const card = (label, title, text, url, foot = "", site = "", shot = "") => {
   const body = `${shot ? `<img class="shot" src="${esc(shot)}" alt="Screenshot of ${esc(title)}" loading="lazy" onerror="this.remove()">` : ""}
     <span class="label">${esc(label)}</span><h3>${esc(title)}</h3><p>${esc(text)}</p>
     ${foot ? `<span class="label">${esc(foot)}</span>` : ""}`;
-  return site
-    ? `<div class="panel card reveal" style="--i:2">${body}
-        <span class="card-links">
-          <a class="go" href="${esc(site)}"${ext(site)}>Visit Site ▶</a>
-          <a href="${esc(url)}"${ext(url)}>View Code</a>
-        </span>
-      </div>`
-    : `<a class="panel card reveal" style="--i:2" href="${esc(url)}"${ext(url)}>${body}</a>`;
+  if (site) return `<div class="panel card reveal" style="--i:2">${body}
+      <span class="card-links"><a class="go" href="${esc(site)}"${ext(site)}>Visit Site ▶</a></span>
+    </div>`;
+  return url
+    ? `<a class="panel card reveal" style="--i:2" href="${esc(url)}"${ext(url)}>${body}</a>`
+    : `<div class="panel card reveal" style="--i:2">${body}</div>`;
 };
 
 $("#name").textContent = ME.name;
@@ -118,7 +120,8 @@ const renderProjects = (repos = []) => {
     ...ME.projects.map((p) => [p.name, p.desc, p.url, p.tag]),
     ...repos.map((r) => {
       const k = r.name.toLowerCase();
-      return [ME.titles[k] || r.name, ME.about[k] || r.description || "No description.", r.html_url, r.language || "Code", ME.sites[k], ME.shots[k]];
+      // no repo link: the code stays out of sight for clients
+      return [ME.titles[k] || r.name, ME.about[k] || r.description || "No description.", "", r.language || "Code", ME.sites[k], ME.shots[k]];
     }),
   ];
   $("#projects").innerHTML = all.map(([n, d, u, t, s, img], i) => card(`Request #${String(i + 1).padStart(2, "0")}`, n, d, u, t, s, img)).join("");
