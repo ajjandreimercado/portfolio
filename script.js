@@ -64,9 +64,10 @@ const ME = {
   ],
   // shown first in Requests; GitHub repos are appended after these
   projects: [],
+  // Social Link rows: arcana, its tarot numeral and a rank (1–10, 10 shows MAX), like P3R's S.Link list
   links: [
-    { label: "GitHub", arcana: "Magician", url: "https://github.com/ajjandreimercado" },
-    { label: "Email", arcana: "Lovers", url: "mailto:ajjandreimercado@gmail.com" },
+    { label: "GitHub", arcana: "Magician", num: "I", rank: 7, url: "https://github.com/ajjandreimercado" },
+    { label: "Email", arcana: "Lovers", num: "VI", rank: 10, url: "mailto:ajjandreimercado@gmail.com" },
   ],
 };
 const RANKS = ["", "Novice", "Apprentice", "Adept", "Expert", "Master"];
@@ -78,7 +79,7 @@ const ext = (url) => (/^https?:/.test(url) ? ' target="_blank" rel="noopener"' :
 // a card with a live site gets a Visit Site button; one with only a url is one big link; with neither, plain text
 const card = (label, title, text, url, foot = "", site = "", shot = "") => {
   const body = `${shot ? `<img class="shot" src="${esc(shot)}" alt="Screenshot of ${esc(title)}" loading="lazy" onerror="this.remove()">` : ""}
-    <span class="label">${esc(label)}</span><h3>${esc(title)}</h3><p>${esc(text)}</p>
+    <span class="label">${esc(label)}${site ? ` <span class="chip">✓ Live</span>` : ""}</span><h3>${esc(title)}</h3><p>${esc(text)}</p>
     ${foot ? `<span class="label">${esc(foot)}</span>` : ""}`;
   if (site) return `<div class="panel card reveal" style="--i:2">${body}
       <span class="card-links"><a class="go" href="${esc(site)}"${ext(site)}>Visit Site ▶</a></span>
@@ -102,7 +103,7 @@ $("#stats").innerHTML = ME.skills.map((s, i) => `
     <div class="bar">${[1, 2, 3, 4, 5].map((n) => `<i class="${n <= s.level ? "on" : ""}"></i>`).join("")}</div>
     <span class="rank">Rk ${s.level} · ${RANKS[s.level]}</span>
   </div>`).join("");
-if (ME.messenger) ME.links.push({ label: "Messenger", arcana: "Chariot", url: ME.messenger });
+if (ME.messenger) ME.links.push({ label: "Messenger", arcana: "Chariot", num: "VII", rank: 8, url: ME.messenger });
 if (ME.cv) $("#cv").innerHTML = `<a class="go" href="${esc(ME.cv)}" download>Download CV ▶</a>`;
 $("#services").innerHTML = ME.services.map(([t, d], i) => `
   <div class="panel service reveal" style="--i:${i + 2}">
@@ -113,7 +114,13 @@ $("#hire-links").innerHTML = [
   mail && `<a class="go" href="${esc(mail.url)}?subject=${encodeURIComponent("Project inquiry")}">Send an Email ▶</a>`,
   ME.messenger && `<a href="${esc(ME.messenger)}"${ext(ME.messenger)}>Message on Messenger</a>`,
 ].filter(Boolean).join("");
-$("#link-list").innerHTML = ME.links.map((l) => card(`Arcana · ${l.arcana}`, l.label, l.url.replace(/^(mailto:|https?:\/\/)/, ""), l.url)).join("");
+$("#link-list").innerHTML = ME.links.map((l, i) => `
+  <a class="slink reveal" style="--i:${i + 2}" href="${esc(l.url)}"${ext(l.url)}>
+    <span class="num">${esc(l.num)}</span>
+    <span class="arcana">${esc(l.arcana)}</span>
+    <span class="srank">Rank <b>${l.rank >= 10 ? "MAX" : l.rank}</b></span>
+    <span class="who">${esc(l.label)} · ${esc(l.url.replace(/^(mailto:|https?:\/\/)/, ""))}</span>
+  </a>`).join("");
 
 const renderProjects = (repos = []) => {
   const all = [
@@ -223,13 +230,38 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const rnd = (a, b) => a + Math.random() * (b - a);
 let current, busy = false;
 
+// P3R furniture: the giant word behind the screen, the Guide line, and the L/R section tabs
+const sections = menu.map((a) => a.hash.slice(1));
+const nameOf = (id) => menu.find((a) => a.hash === "#" + id)?.querySelector("span").textContent ?? "";
+const ghost = $("#ghost");
+const setScene = (word, guide) => {
+  if (ghost.textContent !== word) {
+    ghost.textContent = word;
+    ghost.classList.remove("in");
+    void ghost.offsetWidth; // restart its slide-in
+    ghost.classList.add("in");
+  }
+  $("#guide-text").textContent = guide;
+};
+const pick = (a) => setScene(a.querySelector("span").textContent, `View ${a.querySelector("small").textContent}`);
+menu.forEach((a) => a.addEventListener("focus", () => pick(a)));
+
 const show = (next) => {
   const prev = current;
   screens.forEach((s) => s.classList.toggle("active", s.id === next));
   document.body.dataset.screen = current = next;
   scrollTo(0, 0);
   // come back to the menu with the item you left from still selected
-  if (next === "home") (menu.find((a) => a.hash === "#" + prev) || menu[0]).focus({ preventScroll: true });
+  if (next === "home") {
+    const a = menu.find((m) => m.hash === "#" + prev) || menu[0];
+    a.focus({ preventScroll: true });
+    return pick(a); // focus events don't fire while the window itself is unfocused
+  }
+  const i = sections.indexOf(next), n = sections.length;
+  $("#lr-prev").hash = sections[(i - 1 + n) % n];
+  $("#lr-next").hash = sections[(i + 1) % n];
+  $("#lr-name").textContent = nameOf(next);
+  setScene(nameOf(next), document.getElementById(next).dataset.guide);
 };
 const done = () => { busy = false; route(); }; // catch up if the hash changed mid-transition
 
@@ -295,6 +327,9 @@ menu.forEach((a) => a.addEventListener("mouseenter", () => {
 }));
 addEventListener("keydown", (e) => {
   if (e.key === "Escape" && current !== "home") location.hash = "#home";
+  // shoulder buttons: Q / E switch to the previous / next section
+  if (current !== "home" && !e.ctrlKey && !e.metaKey && !e.altKey && (e.key === "q" || e.key === "e"))
+    location.hash = $(e.key === "q" ? "#lr-prev" : "#lr-next").hash;
   if (current === "home" && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
     e.preventDefault();
     const i = menu.indexOf(document.activeElement);
@@ -302,3 +337,7 @@ addEventListener("keydown", (e) => {
     sfx.move();
   }
 });
+
+// red petals drifting through the water, as on every P3R menu
+$(".petals").innerHTML = Array.from({ length: 14 }, () =>
+  `<i style="left:${rnd(0, 100)}%;--s:${rnd(.6, 1.4).toFixed(2)};--t:${rnd(9, 18).toFixed(1)}s;--d:-${rnd(0, 18).toFixed(1)}s;--r:${rnd(-180, 180) | 0}deg"></i>`).join("");

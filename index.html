@@ -27,7 +27,11 @@
   <div class="moon"></div>
   <div class="streaks"></div>
   <div class="water"></div>
+  <div class="band"></div>
+  <div class="petals"></div>
 </div>
+<!-- the huge outlined word P3R puts behind every menu ("SOCIAL LINK", "QUEST"…) -->
+<div class="ghost" id="ghost" aria-hidden="true"></div>
 
 <header class="hud" aria-label="Date and time">
   <div class="hud-date"><span id="hud-md"></span><span id="hud-day"></span></div>
@@ -52,10 +56,10 @@
     </nav>
   </section>
 
-  <section id="status" class="screen" aria-label="About me">
+  <section id="status" class="screen" aria-label="About me" data-guide="Whose status do you want to view?">
     <h2 class="screen-title reveal"><span>Status</span></h2>
     <div class="panel status reveal" style="--i:1">
-      <img id="avatar" class="avatar" alt="" width="220" height="220" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='10' height='10' fill='%231e6bff'/%3E%3Ccircle cx='5' cy='4' r='2' fill='%234ff3ff'/%3E%3Cpath d='M1 10q4-6 8 0' fill='%234ff3ff'/%3E%3C/svg%3E">
+      <figure class="portrait"><img id="avatar" class="avatar" alt="" width="220" height="220" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='10' height='10' fill='%231e6bff'/%3E%3Ccircle cx='5' cy='4' r='2' fill='%234ff3ff'/%3E%3Cpath d='M1 10q4-6 8 0' fill='%234ff3ff'/%3E%3C/svg%3E"><figcaption>Leader</figcaption></figure>
       <div>
         <p class="label">Arcana · <b>The Fool</b></p>
         <h3 id="status-name"></h3>
@@ -66,23 +70,23 @@
     </div>
   </section>
 
-  <section id="skills" class="screen" aria-label="Skills">
+  <section id="skills" class="screen" aria-label="Skills" data-guide="Which stat do you want to check?">
     <h2 class="screen-title reveal"><span>Social Stats</span></h2>
     <div id="stats" class="stats"></div>
   </section>
 
-  <section id="requests" class="screen" aria-label="Projects">
+  <section id="requests" class="screen" aria-label="Projects" data-guide="Which request do you want to view?">
     <h2 class="screen-title reveal"><span>Requests</span></h2>
     <div id="projects" class="cards"></div>
   </section>
 
-  <section id="links" class="screen" aria-label="Profiles and contact">
+  <section id="links" class="screen" aria-label="Profiles and contact" data-guide="Whose S. Link do you want to view?">
     <h2 class="screen-title reveal"><span>Social Link</span></h2>
     <div id="gh-card" class="panel gh reveal" style="--i:1"></div>
     <div id="link-list" class="cards"></div>
   </section>
 
-  <section id="commissions" class="screen" aria-label="Services and hiring">
+  <section id="commissions" class="screen" aria-label="Services and hiring" data-guide="What do you want me to build?">
     <h2 class="screen-title reveal"><span>Commissions</span></h2>
     <p class="lead reveal" style="--i:1">Need something built? Here's what I can make for you.</p>
     <div id="services" class="cards"></div>
@@ -97,7 +101,15 @@
 </main>
 
 <a href="#home" class="back">◀ Back <kbd>Esc</kbd></a>
-<p class="controls" aria-hidden="true"><kbd>↑↓</kbd> Select <kbd>Enter</kbd> Confirm <kbd>Esc</kbd> Back</p>
+<!-- L/R: jump to the neighbouring section, like the shoulder buttons -->
+<nav class="lr" aria-label="Switch section">
+  <a id="lr-prev" href="#home" aria-label="Previous section">L</a><b id="lr-name"></b><a id="lr-next" href="#home" aria-label="Next section">R</a>
+</nav>
+<div class="guide">
+  <small>Guide</small>
+  <p id="guide-text"></p>
+  <p class="controls" aria-hidden="true"><span class="on-home"><kbd>↑↓</kbd> Select <kbd>Enter</kbd> Confirm</span><span class="off-home"><kbd>Q</kbd><kbd>E</kbd> Switch</span> <kbd>Esc</kbd> Back</p>
+</div>
 
 <div class="side-word" aria-hidden="true">Main</div>
 

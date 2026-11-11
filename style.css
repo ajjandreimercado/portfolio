@@ -62,6 +62,32 @@ kbd {
   animation: shimmer 6s ease-in-out infinite alternate;
 }
 @keyframes shimmer { to { background-position: 0 40px, 0 0; } }
+/* the white diagonal sweep behind every sub-menu */
+.band {
+  display: none; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 52%, color-mix(in srgb, var(--white) 85%, transparent) 52% 53%,
+    color-mix(in srgb, var(--white) 12%, transparent) 53% 71%, transparent 71%);
+}
+body:not([data-screen="home"]) .band { display: block; }
+.petals i {
+  position: absolute; top: -4%; width: calc(12px * var(--s)); height: calc(16px * var(--s));
+  background: #ff2a4a; opacity: .75; clip-path: polygon(50% 0, 100% 35%, 60% 100%, 0 60%);
+  animation: petal var(--t) linear var(--d) infinite;
+}
+@keyframes petal {
+  50% { transform: translate(6vw, 55vh) rotate(var(--r)); }
+  to { transform: translate(-2vw, 110vh) rotate(calc(var(--r) * 2)); }
+}
+.ghost {
+  position: fixed; right: -4vw; bottom: 8vh; z-index: 0; pointer-events: none; white-space: nowrap;
+  font: 400 clamp(6rem, 20vw, 20rem)/.85 var(--display); text-transform: uppercase;
+  color: color-mix(in srgb, var(--white) 6%, transparent);
+  -webkit-text-stroke: 3px color-mix(in srgb, var(--white) 32%, transparent);
+  transform: rotate(-16deg); transform-origin: right bottom;
+}
+.ghost.in { animation: ghost-in .5s cubic-bezier(.2, .9, .2, 1) both; }
+@keyframes ghost-in { from { opacity: 0; translate: 12vw 0; } }
+main { position: relative; z-index: 1; }
 
 /* ---------- HUD (P3 calendar) ---------- */
 .hud {
@@ -206,20 +232,57 @@ body:not([data-screen="home"]) .side-word { display: none; }
 }
 .back:is(:hover, :focus-visible) { background: var(--white); color: var(--ink); outline: none; }
 body[data-screen="home"] .back { display: none; }
-.controls {
-  position: fixed; right: max(16px, 3vw); bottom: 1.2rem;
-  font: italic 700 1rem var(--body); text-transform: uppercase; letter-spacing: .05em; opacity: .85;
+/* P3R's Guide: what the screen is asking, then the buttons */
+.guide {
+  position: fixed; right: max(16px, 3vw); bottom: 1rem; z-index: 10; max-width: min(60vw, 32rem);
+  text-align: right; pointer-events: none;
 }
+.guide small { display: block; font: italic 700 .8rem var(--body); text-transform: uppercase; letter-spacing: .2em; color: var(--cyan); }
+#guide-text {
+  font: italic 600 clamp(1.1rem, 2vw, 1.45rem)/1.2 var(--body); text-shadow: 2px 2px 0 var(--ink);
+  border-bottom: 2px solid var(--white); padding-bottom: .2rem; margin-bottom: .3rem;
+}
+.controls { font: italic 700 1rem var(--body); text-transform: uppercase; letter-spacing: .05em; opacity: .85; }
 .controls kbd { margin-left: .8em; }
+/* L/R section tabs */
+.lr {
+  position: fixed; left: max(16px, 3vw); top: 1.1rem; z-index: 10;
+  display: flex; align-items: center; gap: .6rem;
+  font: italic 400 1.6rem/1 var(--display); text-transform: uppercase;
+}
+body[data-screen="home"] .lr { display: none; }
+.lr a { text-decoration: none; color: var(--white); text-shadow: 3px 3px 0 var(--ink); }
+.lr a::before, .lr a::after { color: #ff2a4a; }
+#lr-prev::before { content: "\25C0  "; }
+#lr-next::after { content: "  \25B6"; }
+.lr a:is(:hover, :focus-visible) { color: var(--cyan); outline: none; }
+body[data-screen="home"] .off-home, body:not([data-screen="home"]) .on-home { display: none; }
+.controls .off-home kbd + kbd { margin-left: .3em; }
+.lr b {
+  font: italic 800 1rem var(--body); letter-spacing: .1em; padding: .25rem 1.2rem;
+  background: var(--white); color: var(--ink); clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+}
 /* keyboard hints mean nothing on touch screens */
 @media (hover: none) { .controls, .back kbd { display: none; } }
 
 /* ---------- status ---------- */
 .status { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; }
-.avatar {
-  width: clamp(140px, 22vw, 220px); height: auto; aspect-ratio: 1; object-fit: cover;
-  background: var(--bright);
+.portrait {
+  position: relative; align-self: start;
+  background: linear-gradient(160deg, var(--white), var(--cyan) 45%, var(--bright));
   clip-path: polygon(8% 0, 100% 4%, 92% 100%, 0 94%);
+}
+/* P3R portraits: greyscale art washed in the menu's blue; full colour on hover */
+.avatar {
+  display: block; width: clamp(140px, 22vw, 220px); height: auto; aspect-ratio: 1; object-fit: cover;
+  mix-blend-mode: luminosity;
+}
+.portrait:hover .avatar { mix-blend-mode: normal; }
+.portrait figcaption {
+  position: absolute; right: 10%; bottom: 9%; padding: .05rem .8rem .05rem .6rem;
+  font: italic 400 1.1rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .05em;
+  background: #ff2a4a; color: var(--white); box-shadow: 4px 4px 0 #0a0a14;
+  transform: rotate(-6deg);
 }
 .status h3 { font: 400 clamp(2.2rem, 5vw, 3.5rem)/1.1 var(--display); text-transform: uppercase; }
 .bio { margin: .5rem 0 1.4rem; max-width: 62ch; font-size: 1.2rem; line-height: 1.5; }
@@ -272,6 +335,38 @@ body[data-screen="home"] .back { display: none; }
   background: var(--white); color: var(--ink);
 }
 .card:is(:hover, :focus-visible) .label { color: var(--blue); }
+/* Social Link list: tarot numeral, arcana, rank, and who it is on the strip below */
+#link-list { grid-template-columns: 1fr; max-width: 640px; gap: .8rem; }
+.slink {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: .9rem;
+  padding: .5rem 1.4rem 0 .6rem; text-decoration: none;
+  background: linear-gradient(100deg, var(--ink), var(--blue)); border-left: 6px solid var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 97% 100%, 0 100%);
+  transition: transform .15s, background .15s;
+}
+.slink:nth-child(2) { margin-left: 1.2rem; }
+.slink:nth-child(3) { margin-left: 2.4rem; }
+.slink .num {
+  min-width: 2.4rem; padding: .1rem .4rem; text-align: center;
+  font: 400 1.5rem/1.2 var(--display); background: var(--white); color: var(--ink); transform: skewX(-10deg);
+}
+.slink .arcana { font: italic 400 clamp(1.8rem, 4vw, 2.4rem)/1.1 var(--display); text-transform: uppercase; }
+.slink .srank { font: italic 800 .95rem var(--body); text-transform: uppercase; letter-spacing: .1em; color: var(--cyan); }
+.slink .srank b { font: 400 2.6rem/1 var(--display); color: var(--white); margin-left: .2rem; vertical-align: -.25em; }
+.slink .who {
+  grid-column: 1 / -1; margin: .4rem -1.4rem 0 -.6rem; padding: .15rem 1rem;
+  font: italic 700 1.05rem var(--body); text-align: center; overflow-wrap: anywhere;
+  background: var(--cyan); color: var(--ink);
+}
+.slink:is(:hover, :focus-visible) { outline: none; transform: translateX(10px); background: var(--white); border-color: #ff2a4a; color: var(--ink); }
+.slink:is(:hover, :focus-visible) :is(.srank, .srank b) { color: var(--ink); }
+.slink:is(:hover, :focus-visible) .num { background: var(--ink); color: var(--white); }
+.chip {
+  display: inline-block; margin-left: .5rem; padding: 0 .6rem; vertical-align: .1em;
+  font: italic 800 .8rem/1.5 var(--body); letter-spacing: .05em; background: var(--cyan); color: var(--ink);
+  clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+}
+.card:is(:hover, :focus-visible, :focus-within) .chip { background: var(--ink); color: var(--cyan); }
 .gh { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; }
 .gh img { width: 110px; height: 110px; clip-path: polygon(8% 0, 100% 4%, 92% 100%, 0 94%); }
 .gh h3 { font: 400 2.2rem/1 var(--display); text-transform: uppercase; }
@@ -314,6 +409,10 @@ body[data-screen="home"] .back { display: none; }
   .menu a small { opacity: .7; }
   .status { grid-template-columns: 1fr; }
   .controls { display: none; }
+  .guide { max-width: 55vw; }
+  .slink:nth-child(n) { margin-left: 0; }
+  .lr { font-size: 1.3rem; gap: 1.2rem; }
+  .lr b { display: none; } /* the date HUD needs the room */
 }
 
 @media (prefers-reduced-motion: reduce) {
